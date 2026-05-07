@@ -1,0 +1,32 @@
+# Claude Code 本地配置与 memory（私密，不上公网）
+.claude/
+
+# Node 依赖（体积大，按需重装）
+node_modules/
+
+# 私人笔记 / 工作流文档（不上公网）
+内容补充清单.md
+提示词使用记录.md
+未完成的思考过程260429.md
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.log
+
+# 历史版本归档（仅本地保留，公网只展示当前线上版）
+# 历史版本可通过 git tag (v1.3 / v2.0 / ...) 在 git 历史中追溯
+index.backup.html
+index.v1.bak.html
+index.v1-early.html
+index.v1.3.html
+index.v2.html
+index.v2.0.html
+index.v2.*.html
+index.v3.html
+index.v3.*.html
+
+# Editor 杂项
+.vscode/
+*.swp
+.idea/
