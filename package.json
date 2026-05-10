@@ -1,0 +1,54 @@
+{
+  "name": "cc_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bidi-js": "^1.0.3",
+    "css-tree": "^3.2.1",
+    "data-urls": "^7.0.0",
+    "decimal.js": "^10.6.0",
+    "entities": "^8.0.0",
+    "html-encoding-sniffer": "^6.0.0",
+    "is-potential-custom-element-name": "^1.0.1",
+    "jsdom": "^29.1.0",
+    "lru-cache": "^11.3.5",
+    "mdn-data": "^2.27.1",
+    "parse5": "^8.0.1",
+    "punycode": "^2.3.1",
+    "require-from-string": "^2.0.2",
+    "saxes": "^6.0.0",
+    "source-map-js": "^1.2.1",
+    "symbol-tree": "^3.2.4",
+    "tldts": "^7.0.29",
+    "tldts-core": "^7.0.29",
+    "tough-cookie": "^6.0.1",
+    "tr46": "^6.0.0",
+    "undici": "^7.25.0",
+    "w3c-xmlserializer": "^5.0.0",
+    "webidl-conversions": "^8.0.1",
+    "whatwg-mimetype": "^5.0.0",
+    "whatwg-url": "^16.0.1",
+    "xml-name-validator": "^5.0.0",
+    "xmlchars": "^2.2.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  },
+  "scripts": {
+    "optimize:images": "node scripts/optimize-images.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/River5216/River5216.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/River5216/River5216.github.io/issues"
+  },
+  "homepage": "https://github.com/River5216/River5216.github.io#readme"
+}

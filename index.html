@@ -448,17 +448,18 @@
       box-shadow: var(--shadow-lg);
       border-color: rgba(0,0,0,0.13);
     }
-    /* Phase 5 · Card Spotlight：鼠标跟手的边框柔光（mask exclude 限定只在 1.5px 边框上显示） */
+    /* Phase 5 · Card Spotlight（Phase 3 柔化:渐变更平缓 + 微暖黄色调） */
     .card::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: inherit;
       padding: 1.5px;
-      background: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 50%),
-        rgba(255, 255, 255, 0.95),
-        rgba(255, 255, 255, 0.20) 30%,
-        rgba(255, 255, 255, 0) 70%);
+      background: radial-gradient(circle 320px at var(--mx, 50%) var(--my, 50%),
+        rgba(255, 248, 230, 0.85),
+        rgba(255, 245, 220, 0.40) 25%,
+        rgba(255, 240, 210, 0.12) 55%,
+        rgba(255, 240, 210, 0) 80%);
       -webkit-mask:
         linear-gradient(#000, #000) content-box,
         linear-gradient(#000, #000);
@@ -468,7 +469,7 @@
         linear-gradient(#000, #000);
               mask-composite: exclude;
       opacity: 0;
-      transition: opacity .35s ease;
+      transition: opacity .45s ease;
       pointer-events: none;
       z-index: 1;
     }
@@ -657,7 +658,9 @@
 
     /* Terminal */
     .terminal-card {
-      background: #0A0A0A;
+      background: rgba(28, 26, 23, 0.96);  /* Phase 3 任务 13:暖灰化 + 微透明,与音乐艺人卡/数码 best Badge 同色系 */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 16px;
       padding: 22px 26px;
@@ -727,45 +730,39 @@
       margin-bottom: 0;
       line-height: 1.15;
     }
+    /* Phase 3 · 技能 tag 降噪:统一形态,仅文字颜色区分等级 */
     .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
     .skill-tag {
-      font-size: .82rem;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      font-size: .80rem;
+      color: rgba(17,17,17,0.85);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.06);
       border-radius: 100px;
-      padding: 5px 14px;
-      transition: transform .25s ease, background .25s, color .25s, border-color .25s;
+      padding: 5px 13px;
+      letter-spacing: -.005em;
+      transition: transform .25s ease, color .25s, background .25s, border-color .25s;
     }
-    .skill-tag:hover { transform: translateY(-1px); background: #fff; }
-    /* Phase 7 · 三层 chip 形态分化（用 :has() 反查父级行的 label） */
+    .skill-tag:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.07);
+      color: var(--text);
+    }
+    /* 三档:仅靠文字深浅区分(底色/边框/前缀全部统一) */
     .skill-tier-row:has([data-tier="proficient"]) .skill-tag {
-      background: var(--text);
-      color: #fff;
-      border-color: var(--text);
+      color: rgba(17,17,17,0.92);
       font-weight: 500;
     }
-    .skill-tier-row:has([data-tier="proficient"]) .skill-tag:hover {
-      background: rgba(0, 0, 0, 0.85);
-    }
     .skill-tier-row:has([data-tier="familiar"]) .skill-tag {
-      background: rgba(255, 255, 255, 0.7);
-      color: var(--text);
-      border: 1px solid rgba(0, 0, 0, 0.12);
+      color: rgba(17,17,17,0.62);
+      font-weight: 400;
     }
     .skill-tier-row:has([data-tier="learning"]) .skill-tag {
-      background: rgba(0, 0, 0, 0.025);
-      color: rgba(17, 17, 17, 0.6);
-      border: 1px solid rgba(0, 0, 0, 0.10);
-      font-style: italic;
+      color: rgba(17,17,17,0.40);
+      font-weight: 400;
     }
-    .skill-tier-row:has([data-tier="learning"]) .skill-tag::before {
-      content: '↗';
-      font-size: .85em;
-      margin-right: 4px;
-      color: rgba(0, 0, 0, 0.4);
-      font-style: normal;
-    }
+    .skill-tier-row:has([data-tier="proficient"]) .skill-tag:hover { color: var(--text); }
+    .skill-tier-row:has([data-tier="familiar"]) .skill-tag:hover  { color: rgba(17,17,17,0.85); }
+    .skill-tier-row:has([data-tier="learning"]) .skill-tag:hover  { color: rgba(17,17,17,0.65); }
     .skill-tiers { display: flex; flex-direction: column; gap: 10px; }
     .skill-tier-row {
       display: flex; flex-wrap: wrap;
@@ -1178,28 +1175,38 @@
     }
 
     /* ─────────────────────────────────────────
-       v2 · NOW STRIP（Hero 下方四项状态）
+       v2 · NOW STRIP（Phase 3 升级:灵动胶囊形态）
     ───────────────────────────────────────── */
     .now-strip {
-      display: flex; align-items: center; flex-wrap: wrap;
-      gap: 6px 18px;
-      font-size: .82rem;
+      display: inline-flex; align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      padding: 9px 18px 9px 14px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 100px;
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.04),
+        0 6px 24px rgba(0,0,0,0.06);
+      font-size: .76rem;
       letter-spacing: .015em;
-      color: var(--muted);
+      color: rgba(0,0,0,0.65);
       margin-bottom: 40px;
-      max-width: 720px;
+      max-width: 100%;
       opacity: 0; transform: translateY(16px);
       animation: fadeUp .8s var(--ease-out-expo) forwards 1.2s;
     }
     .now-strip .now-dot {
-      width: 9px; height: 9px; border-radius: 50%;
+      width: 8px; height: 8px; border-radius: 50%;
       background: #16a34a;
       position: relative;
-      box-shadow: 0 0 12px 2px rgba(22, 163, 74, 0.55);
+      box-shadow: 0 0 8px 1px rgba(22, 163, 74, 0.55);
       animation: nowBreath 2.0s ease-in-out infinite;
       flex-shrink: 0;
+      margin-right: 10px;
     }
-    /* 外环呼吸：用 ::before 做扩散环，比单一 box-shadow 更明显 */
     .now-strip .now-dot::before {
       content: '';
       position: absolute;
@@ -1212,11 +1219,11 @@
     @keyframes nowBreath {
       0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 12px 2px rgba(22, 163, 74, 0.55);
+        box-shadow: 0 0 8px 1px rgba(22, 163, 74, 0.55);
       }
       50% {
-        transform: scale(1.25);
-        box-shadow: 0 0 18px 4px rgba(22, 163, 74, 0.75);
+        transform: scale(1.22);
+        box-shadow: 0 0 12px 3px rgba(22, 163, 74, 0.70);
       }
     }
     @keyframes nowBreathRing {
@@ -1230,30 +1237,58 @@
       }
     }
     .now-strip .now-label {
-      font-size: .68rem; letter-spacing: .18em;
+      font-size: .60rem; letter-spacing: .18em;
       text-transform: uppercase; color: var(--text);
-      font-weight: 600;
-      margin-right: 4px;
+      font-weight: 700;
+      padding-right: 12px;
+      margin-right: 10px;
+      border-right: 1px solid rgba(0,0,0,0.10);
     }
     .now-strip .now-item {
       white-space: nowrap;
       position: relative;
-      padding: 2px 0;
-      transition: color .25s ease;
+      padding: 2px 10px;
+      border-radius: 100px;
+      transition: color .25s ease, background .25s ease;
       cursor: default;
+      color: rgba(0,0,0,0.62);
     }
-    .now-strip .now-item:hover { color: var(--text); }
-    .now-strip .now-item::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 100%;
-      bottom: 0;
-      height: 1px;
-      background: var(--text);
-      transition: right .35s cubic-bezier(.22,1,.36,1);
+    .now-strip .now-item:hover {
+      color: var(--text);
+      background: rgba(0,0,0,0.04);
     }
-    .now-strip .now-item:hover::after { right: 0; }
-    .now-strip .now-sep { color: rgba(0,0,0,0.22); }
+    .now-strip .now-item::after { display: none; }  /* 胶囊化后不再用下划线 */
+    .now-strip .now-sep {
+      color: rgba(0,0,0,0.18);
+      font-size: .85rem;
+      line-height: 1;
+      padding: 0 1px;
+    }
+    @media (max-width: 560px) {
+      .now-strip {
+        /* Phase 3 任务 16 务实方案:移动端允许换行,胶囊形态适配多行
+           关键:从纯圆角 100px 改成大圆角 22px(多行时圆角不再扭曲) */
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px 4px;  /* 行间 6px / item 间 4px */
+        padding: 10px 14px;
+        font-size: .72rem;
+        border-radius: 22px;  /* 多行时仍优雅,不会因 100px 圆角与多行冲突 */
+        max-width: 100%;
+      }
+      .now-strip .now-dot { margin-right: 8px; }
+      .now-strip .now-label {
+        font-size: .56rem;
+        padding-right: 10px;
+        margin-right: 6px;
+        /* 移动端取消右竖线分隔,避免多行时分隔线悬空 */
+        border-right: none;
+      }
+      .now-strip .now-item { padding: 2px 7px; }
+      /* 移动端隐藏 · 分隔符,改用 flex-wrap 自然分隔 */
+      .now-strip .now-sep { display: none; }
+    }
 
     /* ─────────────────────────────────────────
        v2 · LEFT CHAPTER RAIL（章节导航点）
@@ -1435,6 +1470,8 @@
       flex: 1; overflow-y: auto;
       padding: 8px;
       max-height: calc(60vh - 60px);
+      scroll-padding-top: 8px;
+      scroll-padding-bottom: 8px;
     }
     .cmdk-item {
       display: flex; align-items: center; gap: 12px;
@@ -1727,6 +1764,9 @@
       margin-bottom: 56px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.08);
       padding-bottom: 0;
+      /* Phase 3 任务 17:右侧渐隐遮罩(全平台生效),只在内容溢出时视觉显现 */
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 92%, transparent 100%);
+              mask-image: linear-gradient(to right, black 0%, black 92%, transparent 100%);
     }
     .detail-chips::-webkit-scrollbar { display: none; }
     .detail-chip {
@@ -2082,7 +2122,6 @@
       .section-sm { padding: 64px 28px; }
     }
     @media (max-width: 560px) {
-      .now-strip { font-size: .76rem; }
       .section { padding: 64px 18px; }
       .section-sm { padding: 48px 18px; }
       .section-label { margin-bottom: 32px; gap: 10px; font-size: .62rem; }
@@ -2230,7 +2269,8 @@
       gap: 18px;
       overflow-x: auto;
       overflow-y: hidden;
-      scroll-snap-type: x mandatory;
+      /* Phase 3 任务 18:桌面 proximity(吸附但不强制),解决触控板顿挫 */
+      scroll-snap-type: x proximity;
       scroll-padding-left: 56px;
       scroll-behavior: smooth;
       scrollbar-width: none;
@@ -2241,6 +2281,10 @@
       /* 边缘渐隐：让滚出视口的图自然 fade，营造"画廊延伸"感 */
       -webkit-mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
               mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
+    }
+    /* 移动端/触控屏:恢复 mandatory 强吸附,保证 swipe 精准切换 */
+    @media (hover: none), (pointer: coarse) {
+      .reel-track { scroll-snap-type: x mandatory; }
     }
     .reel-track::-webkit-scrollbar { display: none; }
     .reel-track.dragging {
@@ -2276,6 +2320,7 @@
       border: 1px solid var(--border);
       pointer-events: auto;
       -webkit-user-drag: none;
+      cursor: zoom-in;  /* 覆盖父元素 grab，明确提示可点击放大 */
       /* 默认状态：略缩 + 弱阴影 + 降饱和 */
       transform: scale(0.93);
       transform-origin: center;
@@ -2419,6 +2464,26 @@
       }
     }
 
+    /* Phase 3 · 触摸设备 hover 状态降级
+       在触摸屏上 :hover 会"残留"到下次点击别处,造成状态错乱
+       用 (hover: none) 媒体查询把易受影响的 hover 反馈关掉 */
+    @media (hover: none), (pointer: coarse) {
+      .rail-dot:hover {
+        transform: none;
+        border-color: rgba(0, 0, 0, 0.30);
+      }
+      .rail-dot:hover::after { opacity: 0; transform: translateX(-50%) translateY(4px); }
+      .skill-tag:hover { transform: none; background: rgba(0,0,0,0.04); color: inherit; }
+      .now-strip .now-item:hover { background: transparent; color: rgba(0,0,0,0.62); }
+      .nav-link:hover, .nav-search:hover { background: inherit; }
+      /* 卡片 hover 降级 — 触摸屏上点击会残留 spotlight */
+      .card:hover { box-shadow: var(--shadow); border-color: rgba(0,0,0,0.07); }
+      .card.spotlight-on::before { opacity: 0; }
+      /* 底部 pill 章节导航点击热区强化:确保不小于 44x44 */
+      .rail-dot { min-width: 16px; min-height: 16px; }
+      .rail-dot::before { inset: -14px; }  /* 16+28*2=72px,远超 44px */
+    }
+
     /* ── 详情页 · 移动端适配 ── */
     @media (max-width: 560px) {
       .detail-bar { padding: 12px 16px; }
@@ -2427,7 +2492,7 @@
       .detail-section { margin-bottom: 40px; }
       /* meta-row 在窄屏变单列避免挤压 */
       .detail-meta-row { grid-template-columns: 1fr; gap: 14px 0; }
-      /* 章节 chip 横向滚动，不换行 */
+      /* 章节 chip 横向滚动，不换行(渐隐 mask 已在主规则中定义) */
       .detail-chips {
         overflow-x: auto;
         flex-wrap: nowrap;
@@ -2490,15 +2555,65 @@
     }
 
     /* ─── Photography shimmer loading skeleton ─── */
+    /* ─── Phase 1.2 · 增强 Loading 动画 ─── */
     @keyframes shimmer {
-      0%   { background-position: -800px 0; }
-      100% { background-position: 800px 0; }
+      0%   { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
     }
-    .portfolio-item img.img-loading {
-      background: linear-gradient(90deg, #f0eeec 25%, #e8e6e4 50%, #f0eeec 75%);
-      background-size: 1600px 100%;
-      animation: shimmer 1.4s ease-in-out infinite;
+
+    /* 通用图片加载状态 (应用于所有图片) */
+    img.img-loading {
+      background: linear-gradient(
+        90deg,
+        #E8E6E2 0%,
+        #F8F6F2 25%,
+        #FFFFFF 50%,
+        #F8F6F2 75%,
+        #E8E6E2 100%
+      );
+      background-size: 2000px 100%;
+      animation: shimmer 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       color: transparent;
+      min-height: 200px; /* 防止布局抖动 */
+      position: relative;
+    }
+
+    /* 摄影作品加载状态 (更高的最小高度) */
+    .portfolio-item img.img-loading {
+      min-height: 400px;
+    }
+
+    /* 加载进度指示器 */
+    img.img-loading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.15), transparent);
+      animation: progress 2s ease-in-out infinite;
+    }
+
+    @keyframes progress {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    /* 加载失败状态 */
+    img.img-error {
+      background: #F4F2EE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    img.img-error::before {
+      content: '图片加载失败';
+      color: rgba(0, 0, 0, 0.35);
+      font-size: 0.85rem;
+      font-weight: 500;
     }
 
     /* ─── Lightbox ─── */
@@ -2522,7 +2637,11 @@
       border-radius: 6px;
       box-shadow: 0 32px 80px rgba(0,0,0,0.5);
       cursor: default;
+      transform-origin: center center;
+      transition: transform .35s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
     }
+    .lightbox-img.panning { transition: none; }  /* 拖拽时关闭过渡,跟手 */
     .lightbox-close {
       position: absolute; top: 20px; right: 24px;
       z-index: 2; width: 36px; height: 36px;
@@ -2559,6 +2678,33 @@
     .lightbox-nav.prev { left: 16px; }
     .lightbox-nav.next { right: 16px; }
     .lightbox-nav.hidden { opacity: 0; pointer-events: none; }
+
+    /* ─── Lightbox 缩放指示器 ─── */
+    .lightbox-zoom-hint {
+      position: absolute; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      padding: 7px 16px;
+      background: rgba(0,0,0,0.60);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 20px;
+      color: rgba(255,255,255,0.88);
+      font-size: 0.78rem;
+      font-weight: 500;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .lightbox-zoom-hint.visible { opacity: 1; }
+
+    /* 缩放状态: bg 不再触发关闭,cursor 换成 grab */
+    .lightbox.zoomed .lightbox-bg { cursor: default; }
+    .lightbox.zoomed { align-items: center; }  /* 缩放时不再用 scroll;靠 transform translate 平移 */
+    .lightbox-img.grab  { cursor: grab  !important; }
+    .lightbox-img.grabbing { cursor: grabbing !important; }
 
     /* ─── Phase 15A · Vinyl Player (竖向布局重设计) ─── */
     @keyframes vinylSpin {
@@ -2620,10 +2766,22 @@
         0 2px 12px rgba(0,0,0,0.55);
       z-index: 3;
     }
+    /* Phase 3 任务 14:内阴影压住封面图边缘,旋转时不漏边线 */
+    .vinyl-label::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,0.20),
+        inset 0 0 8px rgba(0,0,0,0.18);
+      pointer-events: none;
+      z-index: 4;
+    }
     .vinyl-label img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+      transition: opacity 0.15s ease;
     }
     .vinyl-embed {
       width: 100%;
@@ -2923,247 +3081,583 @@
       background: transparent;
     }
 
-    /* ─── Phase 18A · 3D 书壳 + 展开面板 ─── */
-    .book-3d-list { display: flex; flex-direction: column; gap: 32px; margin-top: 8px; }
-    .book-3d-entry { display: flex; flex-direction: column; gap: 16px; }
+    /* ─── Phase 2D 第二轮 · 扁平化书卡 + Pull Quote + Accordion ─── */
+    .book-3d-list { display: flex; flex-direction: column; gap: 56px; margin-top: 12px; }
+    .book-3d-entry { display: flex; flex-direction: column; gap: 18px; }
     .book-3d-main {
       display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 22px;
+      grid-template-columns: 180px 1fr;
+      gap: 36px;
       align-items: flex-start;
     }
-    @media (max-width: 480px) { .book-3d-main { grid-template-columns: 80px 1fr; gap: 14px; } }
-    /* 书壳 */
+    @media (max-width: 720px) { .book-3d-main { grid-template-columns: 130px 1fr; gap: 22px; } }
+    @media (max-width: 480px) { .book-3d-main { grid-template-columns: 1fr; gap: 18px; } }
+
+    /* 扁平 2D 书封 — 真实厚度 + 自然投影,放弃 3D 透视 */
     .book-cover-wrap {
       cursor: pointer;
-      width: 110px; flex-shrink: 0;
-      /* perspective 直接放在 transform 里，避免 preserve-3d 的阴影问题 */
+      width: 180px; flex-shrink: 0;
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
     }
-    @media (max-width: 480px) { .book-cover-wrap { width: 80px; } }
+    @media (max-width: 720px) { .book-cover-wrap { width: 130px; } }
+    @media (max-width: 480px) { .book-cover-wrap { width: 140px; margin: 0 0 4px; } }
+    .book-cover-wrap:hover { transform: translateY(-3px); }
+
     .book-cover-3d {
       width: 100%;
-      aspect-ratio: 3/4;
+      aspect-ratio: 2/3;
       position: relative;
-      transform: perspective(700px) rotateY(-14deg) rotateX(1deg);
-      transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s;
-      border-radius: 1px 4px 4px 1px;
+      border-radius: 2px 4px 4px 2px;
+      overflow: hidden;
       box-shadow:
-        -5px 0 10px rgba(0,0,0,0.22),
-        3px 8px 22px rgba(0,0,0,0.22);
+        0 1px 1px rgba(0,0,0,0.10),
+        0 4px 8px rgba(0,0,0,0.12),
+        0 12px 28px rgba(0,0,0,0.14);
+      transition: box-shadow .35s cubic-bezier(.22,1,.36,1);
     }
     .book-cover-wrap:hover .book-cover-3d {
-      transform: perspective(700px) rotateY(-24deg) rotateX(1deg);
       box-shadow:
-        -8px 0 14px rgba(0,0,0,0.28),
-        4px 10px 28px rgba(0,0,0,0.26);
+        0 2px 2px rgba(0,0,0,0.12),
+        0 8px 16px rgba(0,0,0,0.16),
+        0 24px 48px rgba(0,0,0,0.20);
     }
-    /* 左侧书脊阴影（模拟折页深度） */
+    /* 左侧装订线阴影,模拟书脊厚度 */
     .book-cover-3d::before {
       content: '';
       position: absolute;
       top: 0; left: 0; bottom: 0;
-      width: 14px;
-      background: linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 60%, transparent 100%);
-      border-radius: 1px 0 0 1px;
-      z-index: 1;
+      width: 6px;
+      background: linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 70%, transparent 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    /* 顶部细高光,模拟纸面 */
+    .book-cover-3d::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.18);
+      z-index: 2;
       pointer-events: none;
     }
     .book-cover-img {
       width: 100%; height: 100%;
       object-fit: cover;
-      border-radius: 1px 4px 4px 1px;
       display: block;
     }
-    .book-cover-spine {
-      position: absolute;
-      top: 0; bottom: 0; left: -7px;
-      width: 7px;
-      background: linear-gradient(to right, #555, #888);
-      border-radius: 2px 0 0 2px;
-      pointer-events: none;
-    }
+    .book-cover-spine { display: none; }  /* 扁平化后不再需要外侧书脊 */
     .book-cover-placeholder {
       width: 100%; height: 100%;
-      border-radius: 1px 4px 4px 1px;
       display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 600; color: rgba(255,255,255,0.8);
+      font-size: 1.05rem; font-weight: 700;
+      color: rgba(255,255,255,0.85);
       letter-spacing: .04em;
     }
-    /* 书名区 */
-    .book-3d-info { display: flex; flex-direction: column; gap: 8px; }
-    .book-3d-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-    .book-3d-title-wrap { display: flex; flex-direction: column; gap: 2px; }
-    .book-3d-title { font-size: .92rem; font-weight: 600; color: var(--text); line-height: 1.3; }
-    .book-3d-author { font-size: .74rem; color: rgba(0,0,0,0.40); }
-    .book-3d-quote {
-      font-size: .88rem;
-      color: rgba(0,0,0,0.65);
-      line-height: 1.75;
-      font-style: italic;
-      padding-left: 14px;
-      border-left: 2px solid rgba(0,0,0,0.14);
+
+    /* 书名区 — 杂志化排版 */
+    .book-3d-info { display: flex; flex-direction: column; gap: 14px; }
+    .book-3d-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
     }
+    .book-3d-title-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .book-3d-title {
+      font-size: 1.18rem; font-weight: 700;
+      color: var(--text); line-height: 1.25;
+      letter-spacing: -.01em;
+      text-wrap: balance;
+    }
+    @media (max-width: 480px) { .book-3d-title { font-size: 1.05rem; } }
+    .book-3d-author {
+      font-size: .72rem; font-weight: 500;
+      color: rgba(0,0,0,0.42);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    /* Pull Quote — 大字号一句话书评 */
+    .book-3d-quote {
+      font-size: 1.02rem;
+      color: rgba(0,0,0,0.74);
+      line-height: 1.65;
+      font-style: italic;
+      font-weight: 400;
+      padding: 4px 0 4px 18px;
+      border-left: 2px solid rgba(0,0,0,0.36);
+      letter-spacing: -.005em;
+      text-wrap: pretty;
+    }
+    @media (max-width: 480px) { .book-3d-quote { font-size: .94rem; padding-left: 14px; } }
+
     /* 展开按钮 */
     .book-expand-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: .72rem; color: rgba(0,0,0,0.40);
-      background: none; border: none; padding: 0;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .70rem; font-weight: 500;
+      color: rgba(0,0,0,0.42);
+      background: none; border: none; padding: 4px 0;
       cursor: pointer;
-      transition: color .2s;
+      transition: color .2s, gap .2s;
       user-select: none;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      margin-top: 2px;
     }
-    .book-expand-btn:hover { color: var(--text); }
+    .book-expand-btn:hover { color: var(--text); gap: 9px; }
     .book-expand-icon {
       display: inline-block;
       transition: transform .3s cubic-bezier(.22,1,.36,1);
       font-style: normal;
+      font-size: .9rem;
     }
     .book-expand-btn.open .book-expand-icon { transform: rotate(90deg); }
-    /* 展开面板 */
+
+    /* Accordion 展开面板 */
     .book-detail-panel {
       overflow: hidden;
       max-height: 0;
       opacity: 0;
-      transition: max-height .45s cubic-bezier(.22,1,.36,1), opacity .3s ease;
+      transition: max-height .50s cubic-bezier(.22,1,.36,1), opacity .3s ease;
     }
-    .book-detail-panel.open { max-height: 800px; opacity: 1; }
+    .book-detail-panel.open { max-height: 1200px; opacity: 1; }
     .book-detail-inner {
-      padding: 16px 20px;
+      padding: 22px 26px;
       background: var(--card-bg);
-      border: 1.5px solid rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.06);
       border-radius: 12px;
-      display: flex; flex-direction: column; gap: 14px;
+      display: flex; flex-direction: column; gap: 20px;
     }
-    .book-detail-row { display: flex; flex-direction: column; gap: 5px; }
+    @media (max-width: 480px) { .book-detail-inner { padding: 18px 18px; } }
+    .book-detail-row { display: flex; flex-direction: column; gap: 7px; }
     .book-detail-label {
-      font-size: .66rem; font-weight: 600;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: rgba(0,0,0,0.32);
+      font-size: .64rem; font-weight: 600;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: rgba(0,0,0,0.34);
     }
     .book-detail-text {
-      font-size: .83rem; color: rgba(0,0,0,0.62); line-height: 1.75;
+      font-size: .85rem; color: rgba(0,0,0,0.66); line-height: 1.78;
     }
     .book-review-quote {
-      font-size: .80rem; color: rgba(0,0,0,0.52);
-      font-style: italic; line-height: 1.70;
-      padding-left: 12px;
-      border-left: 2px solid rgba(0,0,0,0.10);
+      font-size: .82rem; color: rgba(0,0,0,0.55);
+      font-style: italic; line-height: 1.74;
+      padding-left: 14px;
+      border-left: 2px solid rgba(0,0,0,0.12);
     }
-    /* 书摘 */
-    .book-highlight-list { display: flex; flex-direction: column; gap: 8px; }
+    .book-highlight-list { display: flex; flex-direction: column; gap: 10px; }
     .book-highlight {
-      font-size: .80rem; color: rgba(0,0,0,0.52);
-      line-height: 1.72; font-style: italic;
-      padding: 10px 14px;
+      font-size: .82rem; color: rgba(0,0,0,0.55);
+      line-height: 1.74; font-style: italic;
+      padding: 12px 16px;
       background: rgba(0,0,0,0.025);
       border-radius: 8px;
       border-left: 3px solid rgba(0,0,0,0.12);
     }
-    /* 想读清单 */
-    .wish-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-    .wish-item {
-      padding: 14px 18px;
-      border-radius: 12px;
-      background: var(--card-bg);
-      border: 1.5px solid rgba(0,0,0,0.07);
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .wish-title {
-      font-size: .88rem; font-weight: 600; color: var(--text); line-height: 1.3;
-    }
-    .wish-author { font-size: .72rem; color: rgba(0,0,0,0.36); }
-    .wish-reason { font-size: .82rem; color: rgba(0,0,0,0.55); line-height: 1.72; }
 
-    /* ─── Phase 20A · 艺人卡片大图重设计 ─── */
-    .artist-bio-list { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
-    .artist-bio-card {
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 20px;
-      padding: 16px 20px;
-      border-radius: 16px;
-      background: var(--card-bg);
-      border: 1.5px solid rgba(0,0,0,0.07);
-      align-items: flex-start;
-      transition: box-shadow .2s;
+    /* 想读清单 — counter() 序号(修复 ::before display:flex bug) */
+    .wish-list {
+      display: flex; flex-direction: column;
+      gap: 0; margin-top: 12px;
+      counter-reset: wishCounter;
+      border-left: 1.5px solid rgba(0,0,0,0.08);
     }
-    .artist-bio-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-    @media (max-width: 560px) { .artist-bio-card { grid-template-columns: 110px 1fr; gap: 14px; } }
+    .wish-item {
+      padding: 18px 22px 18px 28px;
+      display: flex; flex-direction: column; gap: 6px;
+      position: relative;
+      counter-increment: wishCounter;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background .18s ease, padding-left .18s ease;
+    }
+    .wish-item:last-child { border-bottom: none; }
+    .wish-item:hover { background: rgba(0,0,0,0.02); padding-left: 32px; }
+    /* 序号:用伪元素+counter,纯文字定位,不依赖 flex 居中 */
+    .wish-item::before {
+      content: counter(wishCounter, decimal-leading-zero);
+      position: absolute;
+      left: -28px; top: 22px;
+      width: 28px;
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: .68rem; font-weight: 600;
+      color: rgba(0,0,0,0.32);
+      text-align: right;
+      padding-right: 10px;
+      letter-spacing: .02em;
+      line-height: 1;
+    }
+    /* 端点小圆点 */
+    .wish-item::after {
+      content: '';
+      position: absolute;
+      left: -4.5px; top: 24px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid rgba(0,0,0,0.20);
+      transition: border-color .18s, background .18s;
+    }
+    .wish-item:hover::after { border-color: rgba(0,0,0,0.45); background: var(--text); }
+    .wish-title {
+      font-size: .96rem; font-weight: 600;
+      color: var(--text); line-height: 1.32;
+      letter-spacing: -.005em;
+    }
+    .wish-author {
+      font-size: .68rem; color: rgba(0,0,0,0.40);
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .wish-reason {
+      font-size: .85rem; color: rgba(0,0,0,0.58); line-height: 1.74;
+      padding-top: 2px;
+    }
+
+    /* ─── Phase 2A 第二轮 · Spotify 纵向大卡 + 暖味融合 ─── */
+    .artist-bio-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      .artist-bio-list { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+    @media (max-width: 560px) {
+      .artist-bio-list { grid-template-columns: 1fr; gap: 14px; }
+    }
+
+    .artist-bio-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #1A1815;  /* 暖味近黑 — 不用纯黑,与米白底融合 */
+      border: 1px solid rgba(255,235,200,0.06);
+      cursor: pointer;
+      transition:
+        transform .35s cubic-bezier(0.22,1,0.36,1),
+        box-shadow .35s cubic-bezier(0.22,1,0.36,1);
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.08),
+        0 8px 24px rgba(28,26,23,0.10);
+    }
+    .artist-bio-card:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.10),
+        0 18px 48px rgba(28,26,23,0.20),
+        0 0 0 1px rgba(255,220,170,0.10);  /* 暖黄外发光 — 文档"边缘柔化"*/
+    }
+
+    /* 大图全宽 1:1 */
     .artist-photo {
-      width: 150px; height: 150px;
-      border-radius: 10px;
+      width: 100%; height: auto;
+      aspect-ratio: 1/1;
       object-fit: cover;
       display: block;
-      background: rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.04);
+      transition: transform .55s cubic-bezier(0.22,1,0.36,1);
     }
-    @media (max-width: 560px) { .artist-photo { width: 110px; height: 110px; } }
-    .artist-photo-placeholder {
-      width: 150px; height: 150px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.08);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; font-weight: 700; color: rgba(0,0,0,0.20);
-      flex-shrink: 0;
-    }
-    .artist-info { display: flex; flex-direction: column; gap: 7px; min-width: 0; padding-top: 2px; }
-    .artist-name { font-size: 1.05rem; font-weight: 700; color: var(--text); letter-spacing: -.01em; line-height: 1.2; }
-    .artist-type { font-size: .73rem; color: rgba(0,0,0,0.38); margin-top: -2px; }
-    .artist-bio-text { font-size: .80rem; color: rgba(0,0,0,0.56); line-height: 1.74; }
-    .artist-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
-    .artist-tag {
-      font-size: .68rem; padding: 2px 8px;
-      border-radius: 100px;
-      border: 1.5px solid rgba(0,0,0,0.09);
-      color: rgba(0,0,0,0.46);
+    .artist-bio-card:hover .artist-photo { transform: scale(1.06); }
+
+    /* 渐变遮罩 — 平缓过渡(文档 Spotlight 柔化思路) */
+    .artist-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(20,18,15,0.05) 35%,
+        rgba(20,18,15,0.40) 60%,
+        rgba(20,18,15,0.78) 82%,
+        rgba(20,18,15,0.94) 100%
+      );
+      pointer-events: none;
     }
 
-    /* ─── Phase 20A · 单曲列表重设计 ─── */
-    .track-list {
-      margin-top: 8px;
-      border-radius: 14px;
+    /* Play 按钮 — Spotify 绿,移到右下,默认下沉 8px */
+    .artist-play-btn {
+      position: absolute;
+      bottom: 18px; right: 18px;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: #1DB954;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transform: translateY(8px) scale(0.92);
+      transition:
+        opacity .28s cubic-bezier(0.22,1,0.36,1),
+        transform .32s cubic-bezier(0.22,1,0.36,1);
+      box-shadow:
+        0 4px 16px rgba(29,185,84,0.40),
+        0 0 0 0 rgba(29,185,84,0.30);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .artist-play-btn svg {
+      width: 22px; height: 22px;
+      fill: #fff;
+      margin-left: 3px;
+    }
+    .artist-bio-card:hover .artist-play-btn {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* 占位 */
+    .artist-photo-placeholder {
+      width: 100%; aspect-ratio: 1/1;
+      background: linear-gradient(135deg, #2A2520 0%, #1A1815 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; font-weight: 700;
+      color: rgba(255,220,170,0.20);
+      letter-spacing: -.02em;
+    }
+
+    /* 文字区 — 压在遮罩底部,Play 按钮右侧留出空间 */
+    .artist-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0 22px 22px;
+      padding-right: 86px;  /* 给 Play 按钮让位 */
+      display: flex; flex-direction: column; gap: 6px;
+      z-index: 2;
+    }
+    @media (max-width: 560px) {
+      .artist-info { padding: 0 18px 18px; padding-right: 78px; }
+    }
+
+    .artist-name {
+      font-size: 1.30rem; font-weight: 700;
+      color: #fff;
+      letter-spacing: -.015em;
+      line-height: 1.18;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.30);
+    }
+    @media (max-width: 560px) { .artist-name { font-size: 1.18rem; } }
+
+    .artist-type {
+      font-size: .66rem;
+      color: rgba(255,220,170,0.55);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .artist-bio-text {
+      font-size: .78rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.62;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      border: 1.5px solid rgba(0,0,0,0.07);
+      margin-top: 4px;
+    }
+
+    .artist-tags {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      margin-top: 8px;
+    }
+    .artist-tag {
+      font-size: .65rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.08);
+      letter-spacing: .02em;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* ─── Phase 1.5 · 移动端艺人列表折叠(单列大卡数值已重调) ─── */
+    @media (max-width: 560px) {
+      .artist-bio-list.collapsible {
+        position: relative;
+        max-height: 520px;  /* 默认露出约 1.2 张大卡 */
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1);
+      }
+      .artist-bio-list.collapsible.expanded {
+        max-height: 4000px;
+      }
+      .artist-bio-list.collapsible:not(.expanded)::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 120px;
+        background: linear-gradient(to bottom, transparent, var(--bg) 80%);
+        pointer-events: none;
+      }
+    }
+    .artist-expand-btn {
+      display: none;
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px 0;
+      background: var(--card-bg);
+      border: 1.5px solid rgba(0,0,0,0.08);
+      border-radius: 100px;
+      font-size: .82rem;
+      font-weight: 500;
+      color: rgba(0,0,0,0.62);
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      text-align: center;
+    }
+    @media (max-width: 560px) { .artist-expand-btn { display: block; } }
+    .artist-expand-btn:hover { background: #EBE8E2; border-color: rgba(0,0,0,0.14); }
+    .artist-expand-btn .btn-icon {
+      display: inline-block;
+      margin-left: 4px;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .artist-expand-btn.expanded .btn-icon { transform: rotate(180deg); }
+
+    /* ─── Phase 2B 第二轮 · 单曲列表(序号→▶切换 / 正在播放波形) ─── */
+    .track-list {
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: var(--card-bg);
     }
     .track-item {
       display: grid;
-      grid-template-columns: 32px 1fr auto;
+      grid-template-columns: 32px 44px 1fr auto;
       gap: 14px;
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-bottom: 1px solid rgba(0,0,0,0.05);
       align-items: center;
-      background: var(--card-bg);
       transition: background .18s;
+      cursor: default;
     }
     .track-item:last-child { border-bottom: none; }
-    .track-item:hover { background: #F4F2EE; }
+    .track-item:hover { background: #EDEAE4; }
+
+    /* 序号区:数字 / ▶ / 波形 三态共栈 */
     .track-num {
-      font-size: .72rem;
-      color: rgba(0,0,0,0.22);
-      font-variant-numeric: tabular-nums;
-      text-align: center;
+      width: 32px; height: 22px;
       display: flex; align-items: center; justify-content: center;
-      height: 20px;
+      position: relative;
     }
-    .track-num-val { display: block; }
-    .track-play-icon { display: none; font-size: .60rem; color: var(--text); }
-    .track-item:hover .track-num-val { display: none; }
-    .track-item:hover .track-play-icon { display: block; }
-    .track-item:hover .track-title { font-weight: 600; }
-    .track-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-    .track-title { font-size: .88rem; font-weight: 500; color: var(--text); line-height: 1.3; transition: font-weight .15s; }
-    .track-artist { font-size: .72rem; color: rgba(0,0,0,0.38); }
-    .track-note { font-size: .76rem; color: rgba(0,0,0,0.44); font-style: italic; line-height: 1.6; margin-top: 3px; }
-    .track-note-placeholder { font-size: .68rem; color: rgba(0,0,0,0.15); font-style: italic; margin-top: 2px; }
-    .track-album { font-size: .68rem; color: rgba(0,0,0,0.25); text-align: right; white-space: nowrap; align-self: center; }
-    .track-list-footer {
-      padding: 12px 18px;
-      background: var(--card-bg);
-      text-align: center;
+    .track-num-val {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
       font-size: .72rem;
-      color: rgba(0,0,0,0.28);
-      letter-spacing: .06em;
+      color: rgba(0,0,0,0.32);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+      transition: opacity .18s;
+    }
+    .track-play-icon {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity .18s;
+    }
+    .track-play-icon svg {
+      width: 14px; height: 14px;
+      fill: var(--text);
+    }
+    /* 普通项 hover:数字隐 / ▶ 显 */
+    .track-item:hover .track-num-val { opacity: 0; }
+    .track-item:hover .track-play-icon { opacity: 1; }
+
+    /* 正在播放波形 */
+    .track-wave {
+      position: absolute; inset: 0;
+      display: none;
+      gap: 2.5px;
+      align-items: center; justify-content: center;
+      height: 100%;
+    }
+    .track-wave > span {
+      display: block; width: 2.5px;
+      background: #1DB954; border-radius: 2px;
+    }
+    .track-wave > span:nth-child(1) { animation: wave 0.9s 0.0s ease-in-out infinite alternate; }
+    .track-wave > span:nth-child(2) { animation: wave 0.9s 0.18s ease-in-out infinite alternate; }
+    .track-wave > span:nth-child(3) { animation: wave 0.9s 0.36s ease-in-out infinite alternate; }
+    @keyframes wave {
+      from { height: 4px; }
+      to   { height: 14px; }
+    }
+    /* now-playing 项:数字隐 / 波形显 / 标题加色 */
+    .track-item.now-playing .track-num-val { opacity: 0; }
+    .track-item.now-playing .track-wave { display: flex; }
+    .track-item.now-playing .track-play-icon { display: none; }
+    .track-item.now-playing .track-title { color: #1DB954; }
+    .track-item.now-playing:hover .track-wave { display: flex; }
+    .track-item.now-playing:hover .track-play-icon { display: none; }
+
+    /* 专辑封面 — 加阴影 */
+    .track-cover {
+      width: 44px; height: 44px;
+      border-radius: 5px;
+      object-fit: cover;
+      background: rgba(0,0,0,0.06);
+      display: block;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    }
+    .track-cover-placeholder {
+      width: 44px; height: 44px;
+      border-radius: 5px;
+      background: rgba(0,0,0,0.05);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .track-cover-placeholder svg {
+      width: 18px; height: 18px;
+      fill: rgba(0,0,0,0.22);
+    }
+
+    /* 主信息 */
+    .track-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .track-title {
+      font-size: .89rem; font-weight: 500;
+      color: var(--text); line-height: 1.3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      letter-spacing: -.005em;
+      transition: color .18s;
+    }
+    .track-item:hover .track-title { color: #1C1A17; }
+    .track-meta {
+      font-size: .72rem;
+      color: rgba(0,0,0,0.42);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      letter-spacing: .005em;
+    }
+    .track-note {
+      font-size: .76rem; color: rgba(0,0,0,0.45);
+      font-style: italic; line-height: 1.55; margin-top: 4px;
+    }
+
+    /* 右侧专辑名(桌面才显示) */
+    .track-album {
+      font-size: .68rem; color: rgba(0,0,0,0.26);
+      text-align: right; white-space: nowrap;
+      align-self: center;
+      letter-spacing: .02em;
+      transition: color .18s;
+    }
+    .track-item:hover .track-album { color: rgba(0,0,0,0.40); }
+
+    .track-list-footer {
+      padding: 13px 18px;
+      text-align: center;
+      font-size: .70rem;
+      color: rgba(0,0,0,0.30);
+      letter-spacing: .08em;
       border-top: 1px solid rgba(0,0,0,0.05);
       font-style: italic;
+    }
+
+    /* 移动端:隐藏专辑名列 */
+    @media (max-width: 560px) {
+      .track-item { grid-template-columns: 28px 38px 1fr; gap: 12px; padding: 10px 14px; }
+      .track-album { display: none; }
+      .track-cover, .track-cover-placeholder { width: 38px; height: 38px; }
+      .track-num { width: 28px; }
     }
 
     /* ─── Phase 18C · 产品图卡 ─── */
@@ -3192,73 +3686,169 @@
     .device-image-name { font-size: .88rem; font-weight: 600; color: var(--text); }
     .device-image-desc { font-size: .80rem; color: rgba(0,0,0,0.52); line-height: 1.65; }
 
-    /* ─── Phase 20D · 数码统一设备卡（参考 Apple 官网逻辑）─── */
+    /* ─── Phase 2C 第二轮 · The Verge / Apple 极客测评风 ─── */
     .device-card-v2 {
       border-radius: 18px;
       overflow: hidden;
-      border: 1.5px solid rgba(0,0,0,0.07);
+      border: 1px solid rgba(0,0,0,0.06);
       background: var(--card-bg);
-      margin-bottom: 18px;
-      transition: box-shadow .25s, border-color .2s;
+      margin-bottom: 24px;
+      transition:
+        box-shadow .35s cubic-bezier(0.22,1,0.36,1),
+        border-color .25s,
+        transform .35s cubic-bezier(0.22,1,0.36,1);
     }
     .device-card-v2:hover {
-      box-shadow: 0 6px 28px rgba(0,0,0,0.08);
-      border-color: rgba(0,0,0,0.12);
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.04),
+        0 12px 36px rgba(0,0,0,0.10);
+      border-color: rgba(0,0,0,0.10);
+      transform: translateY(-2px);
     }
+    /* Hero 产品图区 — 微噪点底,模拟杂志摄影台 */
     .device-card-v2-hero {
       width: 100%;
       aspect-ratio: 16/10;
-      background: #EFECE6;
+      background:
+        radial-gradient(ellipse at center, #F4F1EB 0%, #ECE8E0 100%);
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      padding: 28px;
+      padding: 36px 40px;
+      position: relative;
+      transition: background .25s;
+    }
+    @media (max-width: 560px) { .device-card-v2-hero { aspect-ratio: 4/3; padding: 24px; } }
+    .device-card-v2:hover .device-card-v2-hero {
+      background: radial-gradient(ellipse at center, #F0EDE6 0%, #E6E2DA 100%);
     }
     .device-card-v2-hero img {
       max-width: 100%; max-height: 100%;
       object-fit: contain;
       display: block;
+      transition: transform .55s cubic-bezier(0.22,1,0.36,1);
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.10));
     }
+    .device-card-v2:hover .device-card-v2-hero img { transform: scale(1.04); }
+
     .device-card-v2-body {
-      padding: 24px 26px 26px;
-      display: flex; flex-direction: column; gap: 14px;
+      padding: 26px 28px 28px;
+      display: flex; flex-direction: column; gap: 18px;
     }
+    @media (max-width: 560px) { .device-card-v2-body { padding: 22px 22px 24px; gap: 16px; } }
+
+    /* Header:产品名 + 硬核 Badge */
     .device-card-v2-header {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap;
     }
     .device-card-v2-name {
-      font-size: 1.08rem; font-weight: 700;
-      letter-spacing: -.015em; color: var(--text);
-      line-height: 1.25;
+      font-size: 1.20rem; font-weight: 700;
+      letter-spacing: -.018em; color: var(--text);
+      line-height: 1.22;
+      flex: 1; min-width: 200px;
+      text-wrap: balance;
     }
+    @media (max-width: 560px) { .device-card-v2-name { font-size: 1.08rem; } }
+
+    /* The Verge 风 Badge — 大字号、带符号、字距 */
     .device-card-v2-status {
-      padding: 4px 11px;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 13px;
       border-radius: 100px;
-      font-size: .70rem; font-weight: 500;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
       white-space: nowrap; flex-shrink: 0;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+      transition: transform .2s;
     }
-    .device-card-v2-status.want-strong { background: #FEF3C7; color: #92400E; }
-    .device-card-v2-status.want { background: rgba(0,0,0,0.06); color: rgba(0,0,0,0.50); }
-    .device-card-v2-status.best { background: #1C1A17; color: #fff; }
-    .device-card-v2-status.using { background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.55); }
+    .device-card-v2:hover .device-card-v2-status { transform: scale(1.02); }
+    .device-card-v2-status::before {
+      font-family: -apple-system, sans-serif;
+      font-size: .85rem;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+    .device-card-v2-status.want-strong {
+      background: #FEF3C7; color: #92400E;
+      border: 1px solid rgba(217,119,6,0.20);
+    }
+    .device-card-v2-status.want-strong::before { content: '★'; }
+    .device-card-v2-status.want {
+      background: rgba(0,0,0,0.04); color: rgba(0,0,0,0.60);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .device-card-v2-status.want::before { content: '✦'; }
+    .device-card-v2-status.best {
+      background: #1C1A17; color: #fff;
+      border: 1px solid #1C1A17;
+    }
+    .device-card-v2-status.best::before { content: '◆'; color: #FCD34D; }
+    .device-card-v2-status.using {
+      background: rgba(0,0,0,0.03); color: rgba(0,0,0,0.55);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .device-card-v2-status.using::before { content: '◯'; }
+
+    /* desire-bar 已废弃(文档点名"认知歧义") */
+    .device-desire-bar { display: none; }
+    .device-desire-fill { display: none; }
+
+    /* Specs — Monospace 双列网格,极客感 */
     .device-card-v2-specs {
-      display: flex; flex-wrap: wrap; gap: 6px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      padding: 14px 0 4px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    @media (max-width: 480px) {
+      .device-card-v2-specs { grid-template-columns: 1fr; }
     }
     .device-spec-pill {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
       font-size: .72rem;
-      padding: 4px 11px;
-      border-radius: 100px;
-      border: 1.5px solid rgba(0,0,0,0.10);
-      color: rgba(0,0,0,0.60);
+      padding: 9px 0;
+      color: rgba(0,0,0,0.62);
       background: transparent;
-      white-space: nowrap;
+      border: none;
+      border-radius: 0;
+      white-space: normal;
+      letter-spacing: -.005em;
+      line-height: 1.4;
+      position: relative;
+      padding-left: 14px;
     }
+    .device-spec-pill::before {
+      content: '·';
+      position: absolute;
+      left: 4px; top: 9px;
+      color: rgba(0,0,0,0.30);
+      font-weight: 700;
+    }
+    /* 偶数项左侧加竖线分隔(双列时) */
+    @media (min-width: 481px) {
+      .device-spec-pill:nth-child(2n) {
+        border-left: 1px solid rgba(0,0,0,0.06);
+        padding-left: 18px;
+      }
+      .device-spec-pill:nth-child(2n)::before { left: 8px; }
+    }
+
+    /* Note — Pull Quote 风,杂志评测语气 */
     .device-card-v2-note {
-      font-size: .82rem;
-      color: rgba(0,0,0,0.55);
+      font-size: .88rem;
+      color: rgba(0,0,0,0.66);
       line-height: 1.74;
+      font-style: italic;
+      border-left: 2px solid rgba(0,0,0,0.30);
+      padding: 4px 0 4px 16px;
       margin-top: 2px;
+      letter-spacing: -.005em;
     }
-    /* 紧凑设备 chips（在用区其他设备） */
+    @media (max-width: 560px) { .device-card-v2-note { font-size: .84rem; padding-left: 14px; } }
+    /* 紧凑设备 chips */
     .device-chips-block { margin-top: 4px; }
     .device-chips-title {
       font-size: .68rem; font-weight: 600;
@@ -3931,6 +4521,7 @@
     <button class="lightbox-nav prev hidden" id="lightboxPrev" aria-label="上一张">‹</button>
     <button class="lightbox-nav next hidden" id="lightboxNext" aria-label="下一张">›</button>
     <button class="lightbox-close" id="lightboxClose" aria-label="关闭大图">✕</button>
+    <div class="lightbox-zoom-hint" id="lightboxZoomHint"></div>
   </div>
 
   <script>
@@ -4065,14 +4656,14 @@
       });
     });
 
-    /* ─── 3D Card Tilt ─── */
+    /* ─── 3D Card Tilt（Phase 3 降噪：幅度从 ±10deg 降到 ±5deg）─── */
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const r   = card.getBoundingClientRect();
-        const rx_ = ((e.clientY - r.top)  / r.height - 0.5) * -10;
-        const ry_ = ((e.clientX - r.left) / r.width  - 0.5) *  10;
-        card.style.transform  = `perspective(900px) rotateX(${rx_}deg) rotateY(${ry_}deg) translateY(-4px) scale(1.005)`;
-        card.style.transition = 'transform .08s linear, box-shadow .3s, border-color .3s, opacity .8s ease';
+        const rx_ = ((e.clientY - r.top)  / r.height - 0.5) * -5;
+        const ry_ = ((e.clientX - r.left) / r.width  - 0.5) *  5;
+        card.style.transform  = `perspective(1100px) rotateX(${rx_}deg) rotateY(${ry_}deg) translateY(-3px) scale(1.003)`;
+        card.style.transition = 'transform .12s linear, box-shadow .3s, border-color .3s, opacity .8s ease';
       });
       card.addEventListener('mouseleave', () => {
         card.style.transform  = card.classList.contains('visible') ? 'translateY(0)' : 'translateY(36px)';
@@ -4924,18 +5515,18 @@
               {
                 type: 'track-list',
                 tracks: [
-                  { title: 'Paranoid Android',        artist: 'Radiohead',   album: 'OK Computer',       note: null },
-                  { title: 'How to Disappear Completely', artist: 'Radiohead', album: 'Kid A',            note: null },
-                  { title: 'Kid A',                   artist: 'Radiohead',   album: 'Kid A',              note: null },
-                  { title: 'Weird Fishes / Arpeggi',  artist: 'Radiohead',   album: 'In Rainbows',        note: null },
-                  { title: 'Jigsaw Falling Into Place', artist: 'Radiohead', album: 'In Rainbows',        note: null },
-                  { title: 'Let Down',                artist: 'Radiohead',   album: 'OK Computer',        note: null },
-                  { title: 'No Surprises',            artist: 'Radiohead',   album: 'OK Computer',        note: null },
+                  { title: 'Paranoid Android',        artist: 'Radiohead',   album: 'OK Computer',       cover: 'assets/music/covers/radiohead_ok-computer.jpg', note: null, nowPlaying: true },
+                  { title: 'How to Disappear Completely', artist: 'Radiohead', album: 'Kid A',            cover: 'assets/music/covers/radiohead_kid-a.jpg', note: null },
+                  { title: 'Kid A',                   artist: 'Radiohead',   album: 'Kid A',              cover: 'assets/music/covers/radiohead_kid-a.jpg', note: null },
+                  { title: 'Weird Fishes / Arpeggi',  artist: 'Radiohead',   album: 'In Rainbows',        cover: 'assets/music/covers/radiohead_in-rainbows.jpg', note: null },
+                  { title: 'Jigsaw Falling Into Place', artist: 'Radiohead', album: 'In Rainbows',        cover: 'assets/music/covers/radiohead_in-rainbows.jpg', note: null },
+                  { title: 'Let Down',                artist: 'Radiohead',   album: 'OK Computer',        cover: 'assets/music/covers/radiohead_ok-computer.jpg', note: null },
+                  { title: 'No Surprises',            artist: 'Radiohead',   album: 'OK Computer',        cover: 'assets/music/covers/radiohead_ok-computer.jpg', note: null },
                   { title: 'Niagara Falls',           artist: 'The Weeknd',  album: 'Hurry Up Tomorrow',  note: null },
                   { title: 'All the Love',            artist: 'Kanye West',  album: 'My Beautiful Dark Twisted Fantasy', note: null },
                   { title: '降温',                    artist: '许嵩',         album: '寻雾启示',            note: null },
-                  { title: '沙滩（钢琴版）',           artist: '陶喆',         album: '黑色柳丁',            note: null },
-                  { title: 'Dear God',                artist: '陶喆',         album: '黑色柳丁',            note: null },
+                  { title: '沙滩（钢琴版）',           artist: '陶喆',         album: '黑色柳丁',            cover: 'assets/music/covers/taozhe_black-tangerine.jpg', note: null },
+                  { title: 'Dear God',                artist: '陶喆',         album: '黑色柳丁',            cover: 'assets/music/covers/taozhe_black-tangerine.jpg', note: null },
                   { title: 'Up in Flames',            artist: 'Chace',       album: 'Single',             note: null },
                   { title: 'Keep Me Warm',            artist: 'Chace',       album: 'Single',             note: null },
                   { title: '神探',                    artist: '丁世光',        album: '神经志',              note: null },
@@ -5279,7 +5870,7 @@
         } else if (b.type === 'images') {
           h += '<div class="block-gallery">';
           (b.images || []).forEach(img => {
-            h += `<div class="block-photo"><img src="${img.src}" alt="${esc(img.caption || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" onclick="openLightbox(this)" style="cursor:pointer" />`;
+            h += `<div class="block-photo"><img src="${img.src}" alt="${esc(img.caption || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" data-lightbox-src onclick="openLightbox(this)" style="cursor:pointer" />`;
             if (img.caption) h += `<div class="block-photo-cap">${esc(img.caption)}</div>`;
             h += '</div>';
           });
@@ -5294,7 +5885,9 @@
           items.forEach(item => {
             h += '<div class="portfolio-item">';
             if (item.src) {
-              h += `<img src="${esc(item.src)}" alt="${esc(item.caption || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" data-lightbox-src draggable="false" />`;
+              // 使用优化版图片加载,保留原图路径用于 lightbox
+              const optSrc = item.src.replace('/photography/', '/photography-opt/');
+              h += `<img src="${esc(optSrc)}" data-original="${esc(item.src)}" alt="${esc(item.caption || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" data-lightbox-src draggable="false" />`;
             } else {
               h += '<div class="slot-placeholder"></div>';
             }
@@ -5311,7 +5904,7 @@
           const albums = b.albums || [];
           const first  = albums[0] || {};
           h += '<div class="vinyl-player">';
-          h += `<div class="vinyl-disc"><div class="vinyl-label"><img src="${esc(first.cover || '')}" alt="${esc(first.title || '')}" /></div></div>`;
+          h += `<div class="vinyl-disc"><div class="vinyl-label"><img src="${esc(first.cover || '')}" alt="${esc(first.title || '')}" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" /></div></div>`;
           h += '<div class="vinyl-embed">';
           if (first.id) {
             h += `<iframe src="https://open.spotify.com/embed/album/${esc(first.id)}?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
@@ -5321,7 +5914,7 @@
             h += '<div class="vinyl-thumbs">';
             albums.forEach((al, i) => {
               h += `<button class="vinyl-thumb${i === 0 ? ' active' : ''}" data-album-id="${esc(al.id)}" data-cover-src="${esc(al.cover)}" data-desc="${esc(al.desc || '')}" type="button">`;
-              h += `<img src="${esc(al.cover)}" alt="${esc(al.title)}" />`;
+              h += `<img src="${esc(al.cover)}" alt="${esc(al.title)}" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
               h += '<div class="vinyl-thumb-info">';
               h += `<div class="vinyl-thumb-title">${esc(al.title)}</div>`;
               h += `<div class="vinyl-thumb-artist">${esc(al.artist)}</div>`;
@@ -5423,24 +6016,25 @@
         } else if (b.type === 'device-image') {
           h += '<div class="device-image-card">';
           h += '<div class="device-image-wrap">';
-          if (b.img) h += `<img src="${esc(b.img)}" alt="${esc(b.name || '')}" loading="lazy" />`;
+          if (b.img) h += `<img src="${esc(b.img)}" alt="${esc(b.name || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
           h += '</div>';
           h += '<div class="device-image-meta">';
           h += `<div class="device-image-name">${esc(b.name || '')}</div>`;
           if (b.desc) h += `<div class="device-image-desc">${esc(b.desc)}</div>`;
           h += '</div></div>';
         } else if (b.type === 'device-card') {
-          h += '<div class="device-card-v2">';
+          const st = b.statusType || 'want';
+          h += `<div class="device-card-v2">`;
           if (b.img) {
             h += '<div class="device-card-v2-hero">';
-            h += `<img src="${esc(b.img)}" alt="${esc(b.name || '')}" loading="lazy" />`;
+            h += `<img src="${esc(b.img)}" alt="${esc(b.name || '')}" loading="lazy" class="img-loading" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
             h += '</div>';
           }
           h += '<div class="device-card-v2-body">';
           h += '<div class="device-card-v2-header">';
           h += `<div class="device-card-v2-name">${esc(b.name || '')}</div>`;
           if (b.status) {
-            h += `<span class="device-card-v2-status ${esc(b.statusType || 'want')}">${esc(b.status)}</span>`;
+            h += `<span class="device-card-v2-status ${esc(st)}">${esc(b.status)}</span>`;
           }
           h += '</div>';
           if (b.specs && b.specs.length) {
@@ -5470,15 +6064,14 @@
             const spineColor = bk.spineColor || '#888';
             h += '<div class="book-3d-entry">';
             h += '<div class="book-3d-main">';
-            // 3D 书壳
+            // 扁平 2D 书封(扁平化后不再需要 spine)
             h += `<div class="book-cover-wrap" onclick="toggleBook('${panelId}','${btnId}')">`;
             h += '<div class="book-cover-3d">';
             if (bk.cover) {
-              h += `<img class="book-cover-img" src="${esc(bk.cover)}" alt="${esc(bk.title)}" loading="lazy" />`;
+              h += `<img class="book-cover-img img-loading" src="${esc(bk.cover)}" alt="${esc(bk.title)}" loading="lazy" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
             } else {
               h += `<div class="book-cover-placeholder" style="background:${esc(spineColor)}">${esc(bk.title.slice(0,2))}</div>`;
             }
-            h += `<div class="book-cover-spine" style="background:linear-gradient(to right,${esc(spineColor)}88,${esc(spineColor)})"></div>`;
             h += '</div></div>';
             // 书名 + 读感
             h += '<div class="book-3d-info">';
@@ -5540,7 +6133,7 @@
           h += '</div>';
         } else if (b.type === 'wish-list') {
           h += '<div class="wish-list">';
-          (b.books || []).forEach(bk => {
+          (b.books || []).forEach((bk) => {
             h += '<div class="wish-item">';
             h += `<div class="wish-title">《${esc(bk.title)}》</div>`;
             if (bk.author) h += `<div class="wish-author">${esc(bk.author)}</div>`;
@@ -5553,10 +6146,12 @@
           (b.artists || []).forEach(a => {
             h += '<div class="artist-bio-card">';
             if (a.photo) {
-              h += `<img class="artist-photo" src="${esc(a.photo)}" alt="${esc(a.name)}" loading="lazy" />`;
+              h += `<img class="artist-photo img-loading" src="${esc(a.photo)}" alt="${esc(a.name)}" loading="lazy" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
             } else {
               h += `<div class="artist-photo-placeholder">${esc(a.name.slice(0,1))}</div>`;
             }
+            h += '<div class="artist-photo-overlay"></div>';
+            h += '<div class="artist-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>';
             h += '<div class="artist-info">';
             h += `<div class="artist-name">${esc(a.name)}</div>`;
             if (a.type) h += `<div class="artist-type">${esc(a.type)}</div>`;
@@ -5570,20 +6165,30 @@
           });
           h += '</div>';
         } else if (b.type === 'track-list') {
+          // 建立专辑封面映射（从 vinyl-player 数据里拿）
+          const coverMap = {};
+          (b.albums || []).forEach(al => { if (al.title && al.cover) coverMap[al.title] = al.cover; });
           h += '<div class="track-list">';
           (b.tracks || []).forEach((t, i) => {
-            h += '<div class="track-item">';
-            h += `<div class="track-num"><span class="track-num-val">${i + 1}</span><span class="track-play-icon">▶</span></div>`;
+            const cover = t.cover || coverMap[t.album] || null;
+            const nowCls = t.nowPlaying ? ' now-playing' : '';
+            h += `<div class="track-item${nowCls}">`;
+            h += '<div class="track-num">';
+            h += `<span class="track-num-val">${String(i + 1).padStart(2, '0')}</span>`;
+            h += '<span class="track-play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>';
+            h += '<span class="track-wave"><span></span><span></span><span></span></span>';
+            h += '</div>';
+            if (cover) {
+              h += `<img class="track-cover img-loading" src="${esc(cover)}" alt="${esc(t.album || '')}" loading="lazy" onload="this.classList.remove('img-loading')" onerror="this.classList.add('img-error')" />`;
+            } else {
+              h += '<div class="track-cover-placeholder"><svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg></div>';
+            }
             h += '<div class="track-main">';
             h += `<div class="track-title">${esc(t.title)}</div>`;
-            h += `<div class="track-artist">${esc(t.artist)}</div>`;
-            if (t.note) {
-              h += `<div class="track-note">${esc(t.note)}</div>`;
-            } else {
-              h += `<div class="track-note-placeholder">…</div>`;
-            }
+            h += `<div class="track-meta">${esc(t.artist)}${t.album && t.album !== 'Single' ? ' · ' + esc(t.album) : ''}</div>`;
+            if (t.note) h += `<div class="track-note">${esc(t.note)}</div>`;
             h += '</div>';
-            h += `<div class="track-album">${esc(t.album || '')}</div>`;
+            h += `<div class="track-album">${esc(t.album === 'Single' ? '' : (t.album || ''))}</div>`;
             h += '</div>';
           });
           h += '<div class="track-list-footer">未完待续 · 持续更新中</div>';
@@ -5702,6 +6307,7 @@
       }
       bindReelInteractions();
       bindVinylInteractions();
+      bindArtistListCollapse();
     }
 
     function toggleBook(panelId, btnId) {
@@ -5712,27 +6318,135 @@
       if (btn) btn.classList.toggle('open', isOpen);
     }
 
+    /* Phase 1.5 · 移动端艺人列表折叠/展开 */
+    function bindArtistListCollapse() {
+      if (window.innerWidth > 560) return; // 仅移动端
+      detailContent.querySelectorAll('.artist-bio-list').forEach(list => {
+        // 超过 2 张卡片才折叠(不足 2 张无需折叠)
+        if (list.children.length <= 2) return;
+        list.classList.add('collapsible');
+
+        const btn = document.createElement('button');
+        btn.className = 'artist-expand-btn';
+        btn.type = 'button';
+        btn.innerHTML = '查看全部艺人 <span class="btn-icon">↓</span>';
+        list.parentNode.insertBefore(btn, list.nextSibling);
+
+        btn.addEventListener('click', () => {
+          const isExpanded = list.classList.toggle('expanded');
+          btn.classList.toggle('expanded', isExpanded);
+          btn.innerHTML = isExpanded
+            ? '收起 <span class="btn-icon">↓</span>'
+            : '查看全部艺人 <span class="btn-icon">↓</span>';
+        });
+      });
+    }
+
     function bindVinylInteractions() {
+      const player    = detailContent.querySelector('.vinyl-player');
       const disc      = detailContent.querySelector('.vinyl-disc');
-      const iframe    = detailContent.querySelector('.vinyl-embed iframe');
+      const embedWrap = detailContent.querySelector('.vinyl-embed');
       const thumbs    = detailContent.querySelectorAll('.vinyl-thumb');
       const descEl    = detailContent.querySelector('.vinyl-album-desc');
-      if (!disc) return;
+      if (!disc || !embedWrap) return;
+
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       disc.style.animationPlayState = reduced ? 'paused' : 'running';
+
+      /* ── iframe 缓存池 ──
+         思路: 把所有 album 的 iframe 一次性注入 embedWrap,
+               切换时只切 display,不重新赋值 src。
+         懒加载: 立即注入全部(loading="lazy" 让浏览器决定何时加载),
+                 首个 iframe 已在 HTML 里存在,其余追加在它后面。 */
+      const existingIframe = embedWrap.querySelector('iframe');
+      const iframeCache = new Map(); // albumId → iframe element
+
+      // 收录已有的第一个 iframe
+      if (existingIframe) {
+        const firstThumb = thumbs[0];
+        if (firstThumb) {
+          const firstId = firstThumb.dataset.albumId;
+          iframeCache.set(firstId, existingIframe);
+          existingIframe.dataset.albumId = firstId;
+        }
+      }
+
+      // 其余 album 的 iframe 延迟 400ms 后批量注入(避免阻塞首屏)
+      const iframeStyle = 'width:100%;height:352px;border:0;border-radius:12px;';
+      setTimeout(() => {
+        thumbs.forEach((thumb, i) => {
+          if (i === 0) return; // 已有
+          const albumId = thumb.dataset.albumId;
+          if (!albumId || iframeCache.has(albumId)) return;
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://open.spotify.com/embed/album/${albumId}?utm_source=generator`;
+          iframe.setAttribute('style', iframeStyle);
+          iframe.setAttribute('allowfullscreen', '');
+          iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+          iframe.setAttribute('loading', 'lazy');
+          iframe.dataset.albumId = albumId;
+          iframe.style.display = 'none';
+          embedWrap.appendChild(iframe);
+          iframeCache.set(albumId, iframe);
+        });
+      }, 400);
+
+      /* 封面图切换(带淡出淡入过渡) */
+      const coverImg = disc.querySelector('.vinyl-label img');
+      function switchCover(src) {
+        if (!coverImg || !src) return;
+        coverImg.style.transition = 'opacity 0.15s';
+        coverImg.style.opacity = '0';
+        setTimeout(() => {
+          coverImg.src = src;
+          coverImg.style.opacity = '1';
+        }, 150);
+      }
+
+      /* 描述文字切换(带淡出淡入) */
+      function switchDesc(text) {
+        if (!descEl) return;
+        descEl.style.transition = 'opacity 0.15s';
+        descEl.style.opacity = '0';
+        setTimeout(() => {
+          descEl.textContent = text;
+          descEl.style.opacity = '1';
+        }, 150);
+      }
+
       thumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
+          if (thumb.classList.contains('active')) return; // 已是当前,跳过
           thumbs.forEach(t => t.classList.remove('active'));
           thumb.classList.add('active');
+
           const albumId  = thumb.dataset.albumId;
           const coverSrc = thumb.dataset.coverSrc;
           const desc     = thumb.dataset.desc || '';
-          const coverImg = disc.querySelector('.vinyl-label img');
-          if (coverImg && coverSrc) coverImg.src = coverSrc;
-          if (iframe && albumId) {
-            iframe.src = `https://open.spotify.com/embed/album/${albumId}?utm_source=generator`;
+
+          // 切换封面和描述
+          switchCover(coverSrc);
+          switchDesc(desc);
+
+          // 切换 iframe (已缓存则瞬切,未缓存则等 setTimeout 注入后再切)
+          const switchIframe = () => {
+            iframeCache.forEach((iframe, id) => {
+              iframe.style.display = id === albumId ? '' : 'none';
+            });
+            // 目标 iframe 不在缓存中(还未注入),fallback: 直接改 src
+            if (!iframeCache.has(albumId) && existingIframe) {
+              existingIframe.src = `https://open.spotify.com/embed/album/${albumId}?utm_source=generator`;
+            }
+          };
+
+          if (iframeCache.has(albumId)) {
+            switchIframe();
+          } else {
+            // 稍等缓存池注入完毕
+            setTimeout(switchIframe, 450);
           }
-          if (descEl) descEl.textContent = desc;
+
+          // 黑胶换碟动画
           if (!reduced) {
             disc.style.animationPlayState = 'paused';
             setTimeout(() => { disc.style.animationPlayState = 'running'; }, 280);
@@ -5821,49 +6535,50 @@
           else if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getActiveIndex() + 1); }
         });
 
-        // 拖拽（桌面端）+ lightbox（点击）·  距离 5px 阈值区分
+        // 拖拽（桌面端）+ lightbox（点击）·  距离 10px 阈值区分
         const isDesktop = () => window.innerWidth > 560;
         let isDown = false, isDragging = false, startX = 0, startScroll = 0;
+        let downTarget = null;  // 记录 pointerdown 的原始目标
 
-        // 改用 Pointer Capture API：所有监听挂在 track 上，消除每次 openDetail 累积全局监听的内存泄漏
+        // Pointer Capture API：所有监听挂在 track 上
         track.addEventListener('pointerdown', (e) => {
           if (e.button !== 0 || !isDesktop()) return;
           isDown = true;
           isDragging = false;
           startX = e.clientX;
           startScroll = track.scrollLeft;
+          downTarget = e.target;  // 记录按下时的目标元素
           track.setPointerCapture(e.pointerId);
           track.classList.add('dragging');
         });
         track.addEventListener('pointermove', (e) => {
           if (!isDown) return;
           const dx = e.clientX - startX;
-          if (Math.abs(dx) > 5) isDragging = true;
+          if (Math.abs(dx) > 10) isDragging = true;
           if (isDragging) {
             e.preventDefault();
             track.scrollLeft = startScroll - dx;
           }
         });
-        track.addEventListener('pointerup', () => {
+        track.addEventListener('pointerup', (e) => {
           if (!isDown) return;
           isDown = false;
           track.classList.remove('dragging');
-          if (isDragging) {
+          if (!isDragging) {
+            // 没有拖拽：判断是否点击了图片，触发 lightbox
+            const img = downTarget && downTarget.closest
+              ? downTarget.closest('img[data-lightbox-src]')
+              : (downTarget && downTarget.matches && downTarget.matches('img[data-lightbox-src]') ? downTarget : null);
+            if (img && typeof openLightbox === 'function') openLightbox(img);
+          } else {
             scrollToIndex(getActiveIndex());
             setTimeout(() => { isDragging = false; }, 0);
           }
+          downTarget = null;
         });
         track.addEventListener('pointercancel', () => {
-          isDown = false; isDragging = false;
+          isDown = false; isDragging = false; downTarget = null;
           track.classList.remove('dragging');
-        });
-
-        // 图片点击 → lightbox（拖拽中跳过）
-        track.querySelectorAll('img[data-lightbox-src]').forEach(img => {
-          img.addEventListener('click', (e) => {
-            if (isDragging) { e.preventDefault(); return; }
-            if (typeof openLightbox === 'function') openLightbox(img);
-          });
         });
       });
     }
@@ -5993,29 +6708,33 @@
           history.pushState(null, '', '#detail/' + slug);
         }
 
-        // 3) Web Animations · 4 段 keyframes，简化 easing 切换（消除顿挫）+ 加大 Q 弹幅度
-        //    0% → 58%   主弹出段：起步加速、末段软到达过冲（cubic-bezier 单段连续）
-        //    58% → 78%  过冲后软回缩（sine 类平滑曲线）
-        //    78% → 100% 软落定（同 sine 类，段间无顿挫）
+        // 3) Web Animations · Phase 3 任务 11:
+        //    全屏容器始终 scale ≤ 1(消除过冲导致的滚动条闪烁/掉帧),
+        //    Q 弹感剥离到 .detail-body 内容层做 translateY 微弹跳
         const anim = detailOverlay.animate([
           { transform: `translate(${r.left}px, ${r.top}px) scale(${sx}, ${sy})`,
             borderRadius: '18px', offset: 0,
-            easing: 'cubic-bezier(0.18, 0.9, 0.36, 1)' },
-          // 过冲点：scale 1.025（Q 弹的"弹"——明显的软过冲）
-          { transform: 'translate(0,0) scale(1.025, 1.025)',
-            borderRadius: '0', offset: 0.58,
-            easing: 'cubic-bezier(0.4, 0, 0.6, 1)' },
-          // 微缩点：scale 0.99（Q 弹的"缩"——软回弹）
-          { transform: 'translate(0,0) scale(0.99, 0.99)',
-            borderRadius: '0', offset: 0.78,
-            easing: 'cubic-bezier(0.4, 0, 0.6, 1)' },
-          // 落定到 1
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
           { transform: 'translate(0,0) scale(1, 1)',
             borderRadius: '0', offset: 1 }
-        ], { duration: 760, fill: 'forwards' });
+        ], { duration: 720, fill: 'forwards' });
+
+        // 内容层独立弹跳:translateY 过冲(20px → -6px → 2px → 0)
+        const detailBody = detailOverlay.querySelector('.detail-body');
+        let bodyAnim = null;
+        if (detailBody) {
+          bodyAnim = detailBody.animate([
+            { transform: 'translateY(20px)', opacity: 0,   offset: 0,    easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+            { transform: 'translateY(-6px)', opacity: 1,   offset: 0.62, easing: 'cubic-bezier(0.4, 0, 0.6, 1)' },
+            { transform: 'translateY(2px)',  opacity: 1,   offset: 0.82, easing: 'cubic-bezier(0.4, 0, 0.6, 1)' },
+            { transform: 'translateY(0)',    opacity: 1,   offset: 1 }
+          ], { duration: 720, fill: 'forwards' });
+        }
 
         anim.onfinish = () => {
           anim.cancel();
+          if (bodyAnim) bodyAnim.cancel();
+          if (detailBody) detailBody.style.transform = '';
           detailOverlay.classList.remove('vt-expanding');
           detailOverlay.style.transformOrigin = '';
           document.body.dataset.vtBusy = '';
@@ -6198,7 +6917,7 @@
       cmdkList.querySelectorAll('.cmdk-item').forEach((el, idx) =>
         el.classList.toggle('selected', idx === i));
       const cur = cmdkList.querySelector('.cmdk-item.selected');
-      if (cur) cur.scrollIntoView({ block: 'nearest' });
+      if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'auto' });
     }
     function runCmdk() {
       const it = cmdkResults[cmdkSelected];
@@ -6322,20 +7041,43 @@
     const lightboxClose = document.getElementById('lightboxClose');
     const lightboxPrev  = document.getElementById('lightboxPrev');
     const lightboxNext  = document.getElementById('lightboxNext');
+    const lightboxZoomHint = document.getElementById('lightboxZoomHint');
     let isZoomed = false;
     let lbClickTimer = null;
     let pinchStartDist = 0;
     let lbImages = [];
     let lbIndex  = -1;
 
+    /* ── Phase 3 任务 10:拖拽平移基于 transform translate(不再用 scrollLeft/Top) ── */
+    let isPanning = false;
+    let panStartX = 0, panStartY = 0;
+    let panOffsetX = 0, panOffsetY = 0;     /* 当前累计平移量 */
+    let panBaseX   = 0, panBaseY   = 0;     /* pointerdown 时的起始 offset */
+    let panMoved = false;
+    const ZOOM_SCALE = 2;
+    const ZOOM_TRANSITION = 'transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+
+    /* ── 缩放提示 (显示后 2s 自动消失) ── */
+    let zoomHintTimer = null;
+    function _showZoomHint(text) {
+      lightboxZoomHint.textContent = text;
+      lightboxZoomHint.classList.add('visible');
+      if (zoomHintTimer) clearTimeout(zoomHintTimer);
+      zoomHintTimer = setTimeout(() => lightboxZoomHint.classList.remove('visible'), 2000);
+    }
+
+    /* ── 应用 transform(缩放 + 平移) ── */
+    function _applyTransform(scale, tx, ty) {
+      lightboxImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+
     function _applyZoomNone() {
-      lightboxImg.style.maxWidth  = 'min(90vw, 1400px)';
-      lightboxImg.style.maxHeight = '88vh';
-      lightboxImg.style.width     = '';
+      panOffsetX = 0; panOffsetY = 0;
+      lightboxImg.style.transformOrigin = 'center center';
+      lightboxImg.style.transform = 'translate(0px, 0px) scale(1)';
       lightboxImg.style.cursor    = 'pointer';
-      lightbox.style.overflowY    = '';
-      lightbox.style.alignItems   = 'center';
-      lightbox.style.paddingBlock = '';
+      lightbox.classList.remove('zoomed');
+      lightboxImg.classList.remove('grab', 'grabbing', 'panning');
     }
     function _syncLbNav() {
       if (lbImages.length <= 1) {
@@ -6347,22 +7089,33 @@
       }
     }
     function _showLbImg(img) {
-      lightboxImg.src = img.src;
+      // 使用原图而非优化版 (data-original 属性)
+      const originalSrc = img.dataset.original || img.src;
+      lightboxImg.src = originalSrc;
       lightboxImg.alt = img.alt;
       isZoomed = false;
       _applyZoomNone();
     }
-    function setZoom(zoomedIn) {
+    /* setZoom(zoomedIn, originX?, originY?)
+       originX/Y:可选,鼠标在图片上的相对坐标(百分比 0-100),双击时传入,
+       使 transform-origin 对准用户想看的点 */
+    function setZoom(zoomedIn, originX, originY) {
       isZoomed = zoomedIn;
       if (zoomedIn) {
-        lightboxImg.style.maxWidth  = 'none';
-        lightboxImg.style.maxHeight = 'none';
-        lightboxImg.style.width     = lightboxImg.naturalWidth ? lightboxImg.naturalWidth + 'px' : '100%';
-        lightboxImg.style.cursor    = 'zoom-out';
-        lightbox.style.overflowY    = 'auto';
-        lightbox.style.alignItems   = 'flex-start';
-        lightbox.style.paddingBlock = '24px';
+        if (typeof originX === 'number' && typeof originY === 'number') {
+          lightboxImg.style.transformOrigin = `${originX}% ${originY}%`;
+        } else {
+          lightboxImg.style.transformOrigin = 'center center';
+        }
+        panOffsetX = 0; panOffsetY = 0;
+        lightboxImg.classList.remove('panning');
+        _applyTransform(ZOOM_SCALE, 0, 0);
+        lightbox.classList.add('zoomed');
+        lightboxImg.classList.add('grab');
+        lightboxImg.classList.remove('grabbing');
+        _showZoomHint('已放大 · 拖拽平移查看细节');
       } else {
+        lightboxImg.classList.remove('panning');
         _applyZoomNone();
       }
     }
@@ -6379,11 +7132,14 @@
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
       isZoomed = false;
+      isPanning = false;
       lbImages = []; lbIndex = -1;
       if (lbClickTimer) { clearTimeout(lbClickTimer); lbClickTimer = null; }
+      if (zoomHintTimer) { clearTimeout(zoomHintTimer); zoomHintTimer = null; }
     }
-    lightboxBg.addEventListener('click', closeLightbox);
     lightboxClose.addEventListener('click', closeLightbox);
+    /* 非缩放状态才允许点 bg 关闭 */
+    lightboxBg.addEventListener('click', () => { if (!isZoomed) closeLightbox(); });
     lightboxPrev.addEventListener('click', () => {
       if (lbIndex > 0) { lbIndex--; _showLbImg(lbImages[lbIndex]); _syncLbNav(); }
     });
@@ -6391,23 +7147,85 @@
       if (lbIndex < lbImages.length - 1) { lbIndex++; _showLbImg(lbImages[lbIndex]); _syncLbNav(); }
     });
 
-    /* 单击关闭 / 双击缩放 */
+    /* ── 单击(非缩放: 放大; 缩放: 还原) / 双击(同单击,取消计时器防重复) ── */
+    /* 缩放点对准鼠标(基于鼠标在图上的相对坐标百分比) */
+    function _zoomOriginFromEvent(e) {
+      const r = lightboxImg.getBoundingClientRect();
+      const ox = ((e.clientX - r.left) / r.width)  * 100;
+      const oy = ((e.clientY - r.top)  / r.height) * 100;
+      return [Math.max(0, Math.min(100, ox)), Math.max(0, Math.min(100, oy))];
+    }
     lightboxImg.addEventListener('click', e => {
       e.stopPropagation();
+      /* 如果刚刚拖拽过就吸收掉这次点击 */
+      if (panMoved) { panMoved = false; return; }
       if (lbClickTimer) return;
       lbClickTimer = setTimeout(() => {
         lbClickTimer = null;
-        if (isZoomed) setZoom(false);
-        else closeLightbox();
+        if (!isZoomed) {
+          const [ox, oy] = _zoomOriginFromEvent(e);
+          setZoom(true, ox, oy);
+        } else {
+          setZoom(false);
+        }
       }, 220);
     });
     lightboxImg.addEventListener('dblclick', e => {
       e.stopPropagation();
       if (lbClickTimer) { clearTimeout(lbClickTimer); lbClickTimer = null; }
-      setZoom(!isZoomed);
+      if (!isZoomed) {
+        const [ox, oy] = _zoomOriginFromEvent(e);
+        setZoom(true, ox, oy);
+      } else {
+        setZoom(false);
+      }
     });
 
-    /* 捏合手势缩放 */
+    /* ── 拖拽平移 (基于 transform translate,不再用 scrollLeft/Top) ── */
+    lightboxImg.addEventListener('pointerdown', e => {
+      if (!isZoomed) return;
+      isPanning = true;
+      panMoved  = false;
+      panStartX = e.clientX;
+      panStartY = e.clientY;
+      panBaseX  = panOffsetX;
+      panBaseY  = panOffsetY;
+      lightboxImg.classList.add('grabbing', 'panning');
+      lightboxImg.classList.remove('grab');
+      lightboxImg.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    lightboxImg.addEventListener('pointermove', e => {
+      if (!isPanning) return;
+      const dx = e.clientX - panStartX;
+      const dy = e.clientY - panStartY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) panMoved = true;
+      panOffsetX = panBaseX + dx;
+      panOffsetY = panBaseY + dy;
+      _applyTransform(ZOOM_SCALE, panOffsetX, panOffsetY);
+    });
+    lightboxImg.addEventListener('pointerup', e => {
+      if (!isPanning) return;
+      isPanning = false;
+      lightboxImg.classList.remove('grabbing', 'panning');
+      lightboxImg.classList.add('grab');
+      lightboxImg.releasePointerCapture(e.pointerId);
+    });
+    lightboxImg.addEventListener('pointercancel', e => {
+      isPanning = false;
+      lightboxImg.classList.remove('grabbing', 'panning');
+      lightboxImg.classList.add('grab');
+    });
+
+    /* ── 键盘导航 ── */
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape')      { closeLightbox(); }
+      else if (e.key === 'ArrowLeft'  && lbIndex > 0)                   { lbIndex--; _showLbImg(lbImages[lbIndex]); _syncLbNav(); }
+      else if (e.key === 'ArrowRight' && lbIndex < lbImages.length - 1) { lbIndex++; _showLbImg(lbImages[lbIndex]); _syncLbNav(); }
+    });
+
+    /* ── 捏合手势缩放 ── */
     lightbox.addEventListener('touchstart', e => {
       if (e.touches.length === 2) {
         pinchStartDist = Math.hypot(
@@ -6475,7 +7293,7 @@
 
   </script>
 
-  <span class="version-tag" aria-hidden="true">v2.0</span>
+  <span class="version-tag" aria-hidden="true">v2.1</span>
 
 </body>
 </html>
